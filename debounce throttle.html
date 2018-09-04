@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    body{
+        height: 10000px;
+    }
+    div{
+        height: 500px;
+        width: 500px;
+        margin: 0 auto;
+        padding: 150px 0 0 0;
+        background-color: pink;
+    }
+    input{
+        margin-left: 170px;
+        height: 20px;
+    }
+</style>
+<body>
+    <div>
+        <input id="test" type="text" placeholder="check"/>
+    </div>
+</body>
+<script>
+    // 区别：throttle会在第一次事件触发的时候就执行，然后每隔wait(等待时间)执行一次，而debounce只会在事件结束之后执行一次
+
+    // 防抖函数在给定时间过去之后仅被调用一次。多个信号合并为一个信号 “去弹跳”
+    // 实现：定时器
+    // 场景：用户注册时候的手机号码验证和邮箱验证
+    // args: fn:节流函数 wait:延时时间
+    function debounce(){
+        let timer = null;
+        return function () {
+           clearTimeout(timer);
+           timer = setTimeout(function (){
+                   console.log("this is debounce");
+                },1000);
+        }
+    }
+    document.getElementById("test").onkeyup= debounce();
+
+    // 节流函数不管事件触发有多频繁，都会保证在规定时间内一定会执行一次真正的事件处理函数。即固定函数执行的速率
+    // 实现：定时器
+    // 场景：监听页面元素滚动事件等高频发事件
+    // args: fn:节流函数  ，wait：延时时间
+    function throttle() {
+        let run = true;  //标志位，记录当前函数是否在执行
+        return function () {
+            if(!run){
+                console.log("funcion is execution");
+                return;
+            }
+            else{
+                setTimeout(function () {
+                    console.log("this is throttle");
+                    run = true;
+                },1000);
+                run = false;
+            }
+        }
+    }
+    //实现：时间戳+定时器
+    // args: fn:节流函数  ，wait：函数执行间隔时间
+    function throttle2(){
+        var timer = null; //计时器
+        var lastTime = null; //上次执行时间
+        return function (){
+            var now = new Date();
+            if(!lastTime){last = now;};
+            if(now - lastTime > 500){
+                console.log("this is throttle");
+                lastTime = now;
+            }else{
+                clearTimeout(timer);
+                timer =  setTimeout(function () {
+                    console.log("this is last throttle");
+                },500)
+            }
+        }
+    }
+    window.onscroll= throttle2();
+</script>
+</html>
